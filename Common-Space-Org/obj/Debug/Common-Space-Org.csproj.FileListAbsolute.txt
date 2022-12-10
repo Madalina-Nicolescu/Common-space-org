@@ -108,3 +108,4 @@ C:\Master\Anul1\Semestrul1\MPOS\Common-Space-org\Common-space-org\Common-Space-O
 C:\Master\Anul1\Semestrul1\MPOS\Common-Space-org\Common-space-org\Common-Space-Org\obj\Debug\Common-Space-Org.pdb
 C:\Master\Anul1\Semestrul1\MPOS\Common-Space-org\Common-space-org\Common-Space-Org\obj\Debug\Common_Space_Org.Migrations.Initial.resources
 C:\Master\Anul1\Semestrul1\MPOS\Common-Space-org\Common-space-org\Common-Space-Org\obj\Debug\Common-Space-Org.csproj.GenerateResource.cache
+C:\Master\Anul1\Semestrul1\MPOS\Common-Space-org\Common-space-org\Common-Space-Org\obj\Debug\Common_Space_Org.Migrations.c.resources
