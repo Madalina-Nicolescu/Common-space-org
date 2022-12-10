@@ -37,22 +37,22 @@ namespace Common_Space_Org.Controllers
             ViewBag.UsersList = users;
         }
 
-        //private void GetAllNotifications()
-        //{
-        //    string id = User.Identity.GetUserId();
-        //    ViewBag.Notifications = (from notif in db.Notifications
-        //                             where notif.receivingUser == id
-        //                             orderby notif.sentDate descending
-        //                             select notif).ToList();
-        //    var unread = (from notif in db.Notifications
-        //                  where notif.receivingUser == id && notif.seen == false
-        //                  select notif).Count();
-        //    ViewBag.Unread = 0;
-        //    if (unread != null)
-        //    {
-        //        ViewBag.Unread = unread;
-        //    }
-        //}
+        private void GetAllNotifications()
+        {
+            string id = User.Identity.GetUserId();
+            ViewBag.Notifications = (from notif in db.Notifications
+                                     where notif.receivingUser == id
+                                     orderby notif.sentDate descending
+                                     select notif).ToList();
+            var unread = (from notif in db.Notifications
+                          where notif.receivingUser == id && notif.seen == false
+                          select notif).Count();
+            ViewBag.Unread = 0;
+            if (unread != null)
+            {
+                ViewBag.Unread = unread;
+            }
+        }
 
         // GET: Profiles
         //Afisarea profilului utilizatorului logat curent
@@ -86,7 +86,7 @@ namespace Common_Space_Org.Controllers
             }
 
             searchedUsers();
-            //GetAllNotifications();
+            GetAllNotifications();
 
             return View();
         }
@@ -151,7 +151,7 @@ namespace Common_Space_Org.Controllers
             ViewBag.IsAdmin = isGroupAdmin(id).Count();
 
             searchedUsers();
-            //GetAllNotifications();
+            GetAllNotifications();
 
             return View(user);
         }
@@ -224,29 +224,29 @@ namespace Common_Space_Org.Controllers
 
 
         //invite to group current user
-        //public ActionResult InviteToGroup(string userId, int groupId)
-        //{
-            
-        //    ApplicationUser groupAdmin = db.Users.Find(User.Identity.GetUserId());
-        //    ApplicationUser invitedUser = db.Users.Find(userId);
-        //    Group group = db.Groups.Find(groupId);
-        //    Notification invite = new Notification();
+        public ActionResult InviteToGroup(string userId, int groupId)
+        {
 
-        //    invite.GroupId = groupId;
-        //    invite.sendingUser = groupAdmin.Id;
-        //    invite.receivingUser = userId;
-        //    invite.sentDate = DateTime.Now;
-        //    invite.seen = false;
-        //    invite.Message = "Hei, " + invitedUser.FirstName + "! " + groupAdmin.FirstName + " " + groupAdmin.LastName + " is inviting you to join a group, " + group.GroupName + ". Accept or ignore the invite!";
-        //    invite.Type = "invite";
+            ApplicationUser groupAdmin = db.Users.Find(User.Identity.GetUserId());
+            ApplicationUser invitedUser = db.Users.Find(userId);
+            Group group = db.Groups.Find(groupId);
+            Notification invite = new Notification();
 
-        //    db.Notifications.Add(invite);
-        //    db.SaveChanges();
+            invite.GroupId = groupId;
+            invite.sendingUser = groupAdmin.Id;
+            invite.receivingUser = userId;
+            invite.sentDate = DateTime.Now;
+            invite.seen = false;
+            invite.Message = "Hei, " + invitedUser.FirstName + "! " + groupAdmin.FirstName + " " + groupAdmin.LastName + " is inviting you to join a group, " + group.GroupName + ". Accept or ignore the invite!";
+            invite.Type = "invite";
 
-        //    TempData["message"] = "Invitation sent!";
-        //    return Redirect("/Profiles/Show/" + userId);
+            db.Notifications.Add(invite);
+            db.SaveChanges();
 
-        //}
+            TempData["message"] = "Invitation sent!";
+            return Redirect("/Profiles/Show/" + userId);
+
+        }
 
     }
 }

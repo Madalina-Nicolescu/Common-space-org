@@ -285,41 +285,40 @@ namespace Common_Space_Org.Controllers
             string message = "Hei " + admin.FirstName + ", " + user.FirstName + " " + user.LastName + " would like to join your group, " + group.GroupName + ". Accept if you think they should be part of the group, dismiss if you think it is a mistake.";
 
             //creez o noua notificare
-            //Notification notification = new Notification();
-            //notification.GroupId = group.GroupId;
-            //notification.sendingUser = user.Id;
-            //notification.receivingUser = admin.Id;
-            //notification.Message = message;
-            //notification.sentDate = sentDate;
-            //notification.Type = "request";
+            Notification notification = new Notification();
+            notification.GroupId = group.GroupId;
+            notification.sendingUser = user.Id;
+            notification.receivingUser = admin.Id;
+            notification.Message = message;
+            notification.sentDate = sentDate;
+            notification.Type = "request";
 
-            //db.Notifications.Add(notification);
-            //db.SaveChanges();
+            db.Notifications.Add(notification);
+            db.SaveChanges();
 
             ViewBag.Accepted = false;
             return Redirect("/Groups/Show/" + @group.GroupId);
 
         }
 
-        //private void GetAllNotifications()
-        //{
-        //    string id = User.Identity.GetUserId();
-        //    viewbag.notifications = (from notif in db.notifications
-        //                             where notif.receivinguser == id
-        //                             orderby notif.sentdate descending
-        //                             select notif).tolist();
+        private void GetAllNotifications()
+        {
+            string id = User.Identity.GetUserId();
+            ViewBag.Notifications = (from notif in db.Notifications
+                                     where notif.receivingUser == id
+                                     orderby notif.sentDate descending
+                                     select notif).ToList();
 
-        //    var unread = (from notif in db.notifications
-        //                  where notif.receivinguser == id && notif.seen == false
-        //                  select notif).count();
-        //    viewbag.unread = 0;
+            var unread = (from notif in db.Notifications
+                          where notif.receivingUser == id && notif.seen == false
+                          select notif).Count();
 
-        //    if (unread != null)
-        //    {
-        //        viewbag.unread = unread;
-        //    }
-
-        //}
+            ViewBag.Unread = 0;
+            if (unread != null)
+            {
+                ViewBag.Unread = unread;
+            }
+        }
 
         [Authorize(Roles = "User, Administrator")]
         public void NewMember(int groupId, string userId)
@@ -335,67 +334,67 @@ namespace Common_Space_Org.Controllers
             db.SaveChanges();
         }
 
-        //public ActionResult AcceptInvite(int id)
-        //{
-        //    Notification notification = db.Notifications.Find(id);
-        //    notification.seen = true;
-        //    NewMember(notification.GroupId, notification.receivingUser);
-        //    var groupId = notification.GroupId;
+        public ActionResult AcceptInvite(int id)
+        {
+            Notification notification = db.Notifications.Find(id);
+            notification.seen = true;
+            NewMember(notification.GroupId, notification.receivingUser);
+            var groupId = notification.GroupId;
 
-        //    ApplicationUser user = db.Users.Find(notification.receivingUser);
-        //    Group group = db.Groups.Find(notification.GroupId);
+            ApplicationUser user = db.Users.Find(notification.receivingUser);
+            Group group = db.Groups.Find(notification.GroupId);
 
-        //    string toMail = user.Email;
-        //    string subject = "Alaturare grup";
-        //    string body = "V-ati alaturat grupului: " + group.GroupName + ". O zi frumoasa!";
-        //    WebMail.Send(toMail, subject, body, null, null, null, true, null, null, null, null, null, null);
-
-
-        //    return Redirect("/Groups/Show/" + groupId);
-        //}
-
-        //public ActionResult AcceptRequest(int id)
-        //{
-        //    Notification notification = db.Notifications.Find(id);
-        //    notification.seen = true;
-
-        //    NewMember(notification.GroupId, notification.sendingUser);
-
-        //    //Trimitere de notificare de acceptare in grup
-        //    Notification acceptanceNotification = new Notification();
-
-        //    acceptanceNotification.seen = false;
-        //    acceptanceNotification.GroupId = notification.GroupId;
-        //    ApplicationUser groupAdmin = db.Users.Find(notification.receivingUser);
-        //    ApplicationUser newGroupMember = db.Users.Find(notification.sendingUser);
-        //    Group group = db.Groups.Find(notification.GroupId);
-
-        //    acceptanceNotification.Message = "Hei, " + newGroupMember.FirstName + ", " + groupAdmin.FirstName + " " + groupAdmin.LastName + " accepted you in a group, " + group.GroupName + ". You can know see the tasks and add new ones!";
-        //    acceptanceNotification.sendingUser = groupAdmin.Id;
-        //    acceptanceNotification.receivingUser = newGroupMember.Id;
-        //    acceptanceNotification.sentDate = DateTime.Now;
-        //    acceptanceNotification.Type = "informational";
-
-        //    db.Notifications.Add(acceptanceNotification);
-
-        //    db.SaveChanges();
-
-        //    string toMail = newGroupMember.Email;
-        //    string subject = "Acceptare in grup";
-        //    string body = "Ati fost acceptat in grupul: " + group.GroupName + ". O zi frumoasa!";
-        //    WebMail.Send(toMail, subject, body, null, null, null, true, null, null, null, null, null, null);
+            string toMail = user.Email;
+            string subject = "Alaturare grup";
+            string body = "V-ati alaturat grupului: " + group.GroupName + ". O zi frumoasa!";
+            WebMail.Send(toMail, subject, body, null, null, null, true, null, null, null, null, null, null);
 
 
-        //    return Redirect("/Profiles/Index");
-        //}
+            return Redirect("/Groups/Show/" + groupId);
+        }
 
-        //public ActionResult DismissRequest(int id)
-        //{
-        //    Notification notification = db.Notifications.Find(id);
-        //    notification.seen = true;
-        //    db.SaveChanges();
-        //    return Redirect("/Profiles/Index");
-        //}
+        public ActionResult AcceptRequest(int id)
+        {
+            Notification notification = db.Notifications.Find(id);
+            notification.seen = true;
+
+            NewMember(notification.GroupId, notification.sendingUser);
+
+            //Trimitere de notificare de acceptare in grup
+            Notification acceptanceNotification = new Notification();
+
+            acceptanceNotification.seen = false;
+            acceptanceNotification.GroupId = notification.GroupId;
+            ApplicationUser groupAdmin = db.Users.Find(notification.receivingUser);
+            ApplicationUser newGroupMember = db.Users.Find(notification.sendingUser);
+            Group group = db.Groups.Find(notification.GroupId);
+
+            acceptanceNotification.Message = "Hei, " + newGroupMember.FirstName + ", " + groupAdmin.FirstName + " " + groupAdmin.LastName + " accepted you in a group, " + group.GroupName + ". You can know see the tasks and add new ones!";
+            acceptanceNotification.sendingUser = groupAdmin.Id;
+            acceptanceNotification.receivingUser = newGroupMember.Id;
+            acceptanceNotification.sentDate = DateTime.Now;
+            acceptanceNotification.Type = "informational";
+
+            db.Notifications.Add(acceptanceNotification);
+
+            db.SaveChanges();
+
+            string toMail = newGroupMember.Email;
+            string subject = "Acceptare in grup";
+            string body = "Ati fost acceptat in grupul: " + group.GroupName + ". O zi frumoasa!";
+            WebMail.Send(toMail, subject, body, null, null, null, true, null, null, null, null, null, null);
+
+
+            return Redirect("/Profiles/Index");
+        }
+
+        public ActionResult DismissRequest(int id)
+        {
+            Notification notification = db.Notifications.Find(id);
+            notification.seen = true;
+            db.SaveChanges();
+            return Redirect("/Profiles/Index");
+        }
 
         [HttpDelete]
         [Authorize(Roles = "User, Administrator")]

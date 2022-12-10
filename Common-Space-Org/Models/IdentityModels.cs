@@ -45,7 +45,7 @@ namespace Common_Space_Org.Models
         //un user poate crea mai multe taskuri
        // public virtual ICollection<Tasks> CreatedTasks { get; set; }
 
-       // public virtual ICollection<Notification> Notifications { get; set; }
+       public virtual ICollection<Notification> Notifications { get; set; }
     }
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
@@ -67,7 +67,7 @@ namespace Common_Space_Org.Models
 
         // public DbSet<Expense> Expenses { get; set; }
 
-        // public DbSet<Notification> Notifications { get; set; }
+        public DbSet<Notification> Notifications { get; set; }
 
         public static ApplicationDbContext Create()
         {
