@@ -10,6 +10,8 @@ namespace Common_Space_Org.Migrations
         public Configuration()
         {
             AutomaticMigrationsEnabled = true;
+            AutomaticMigrationDataLossAllowed = true;
+            ContextKey = "Common_Space_Org.Models.ApplicationDbContext";
         }
 
         protected override void Seed(Common_Space_Org.Models.ApplicationDbContext context)
