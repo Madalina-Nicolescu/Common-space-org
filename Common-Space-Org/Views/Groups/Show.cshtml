@@ -1,0 +1,709 @@
+﻿@{
+    Layout = "~/Views/Shared/Dashboard.cshtml";
+}
+
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+
+        @if (ViewBag.isGroupOwner)
+        {
+            <a class="glyphicon glyphicon-edit" href="/Groups/Edit/@ViewBag.Group.GroupId" style="text-align:center; display:block"> Modifica grupul</a>}
+
+        @if (ViewBag.isGroupOwner || ViewBag.isAdmin)
+        {
+            <form method="post" action="/Groups/Delete/@ViewBag.Group.GroupId">
+                @Html.HttpMethodOverride(HttpVerbs.Delete)
+                <button class="glyphicon glyphicon-trash pull-right" style="border: none; background: transparent;text-align:center; display:block" type="submit">Sterge grup</button>
+            </form>
+            <br />
+            <br />
+        }
+    </div>
+
+
+
+    <div class="panel-body" style="border-radius:0 0 20px 20px">
+
+        <br />
+
+        @if (ViewBag.UsersCount != 0)
+        {
+            foreach (var reg in ViewBag.Group.Registrations)
+            {
+                if ((reg.User == ViewBag.User) && (ViewBag.isGroupOwner == false))
+                {
+                    <form method="post" action="/Groups/LeaveGroup/@reg.RegistrationId">
+                        @Html.HttpMethodOverride(HttpVerbs.Delete)
+                        <button class="btn btn-danger pull-right" type="submit">
+                            <span class="glyphicon glyphicon-remove-circle"></span>
+                            Paraseste grupul
+                        </button>
+                    </form>}
+            }
+        }
+
+    </div>
+</div>
+
+@if (ViewBag.isInGroup)
+{
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-3 col-md-6 col-sm-6">
+
+            <ul class="nav navbar-nav">
+                <li class="nav-item">
+                    @if (ViewBag.Group.GroupDescription != null)
+                    {
+
+                        <p>
+                            Descriere grup: @ViewBag.Group.GroupDescription
+                        </p>
+                    }
+                    else if (ViewBag.isGroupOwner)
+                    {
+                        <p>
+                            <a class="glyphicon glyphicon-edit" href="/Groups/Edit/@ViewBag.Group.GroupId"> Adauga descriere</a>
+                        </p>
+                        <br /><br />}
+                </li>
+
+            </ul>
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-3 col-md-6 col-sm-6">
+            <div class="card card-stats">
+                <div class="card-header card-header-warning card-header-icon">
+                    <div class="card-icon">
+                        <i class="material-icons">content_copy</i>
+                    </div>
+                    <p class="card-category">Total Tasks</p>
+                    <h3 class="card-title">@ViewBag.countTasks</h3>
+                </div>
+                <div class="card-footer">
+                    <div class="stats">
+                        <i class="material-icons">local_offer</i> Tracked
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6 col-sm-6">
+            <div class="card card-stats">
+                <div class="card-header card-header-danger card-header-icon">
+                    <div class="card-icon">
+                        <i class="material-icons">info_outline</i>
+                    </div>
+                    <p class="card-category">Solved Tasks</p>
+                    <h3 class="card-title">@ViewBag.countDone</h3>
+                </div>
+                <div class="card-footer">
+                    <div class="stats">
+                        <i class="material-icons">local_offer</i> Tracked
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-6">
+            <div class="card card-stats">
+                <div class="card-header card-header-info card-header-icon">
+                    <div class="card-icon">
+                        <i class="fa fa-users"></i>
+                    </div>
+                    <p class="card-category">Members</p>
+                    <h3 class="card-title">@ViewBag.UsersCount</h3>
+                </div>
+                <div class="card-footer">
+                    <div class="stats">
+                        <i class="material-icons">update</i> Grup creat de @ViewBag.Group.User.UserName
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card card-chart">
+                <div class="card-header card-header-success">
+                    <div class="ct-chart" id="dailySalesChart">Add Task</div>
+                </div>
+                <div class="card-body">
+
+                    @using (Html.BeginForm(actionName: "New", controllerName: "Taskss"))
+                    {
+                        @Html.Hidden("GroupId")
+
+                        @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+                        <input type="hidden" name="GroupId" value="@ViewBag.Group.GroupId" />
+                        @Html.Label("Title", "Titlu Task")
+
+                        @Html.TextBox("Title", null, new { @class = "form-control" })
+
+                        @Html.ValidationMessage("Title", null, new { @class = "text-danger" })
+
+                        <br />
+
+                        @Html.Label("Descriprtion", "Continut task")
+
+                        @Html.TextArea("Description", null, new { @class = "form-control" })
+
+                        @Html.ValidationMessage("Description", null, new { @class = "text-danger" })
+
+                        <br />
+
+                        @Html.Label("Deadline", "Deadline")
+
+                        <input class="text-box single-line form-control" data-val="true" data-val-date="The field Date of Birth must be a date." id="Deadline" name="Deadline" type="date" value="">
+
+
+                        <br />
+
+                        @Html.Label("UserId2", "Asignat")
+
+                        @Html.DropDownList("UserId2", new SelectList(ViewBag.UsersList, "Value", "Text"), "Selectati utilizator", new { @class = "form-control" })
+
+                        <br />
+
+                        <table class="table">
+                            <tbody>
+                                <tr>
+                                    <div class="form-check">
+
+                                        <td>
+                                            @Html.Label("Priority", "Urgent")
+
+                                            @Html.RadioButton("Priority", "Urgent", false)
+                                        </td>
+                                        <td>
+                                            @Html.Label("Priority", "Medium")
+
+                                            @Html.RadioButton("Priority", "Medium", false)
+                                        </td>
+                                        <td>
+                                            @Html.Label("Priority", "Low")
+
+                                            @Html.RadioButton("Priority", "Low", true)
+                                        </td>
+
+
+                                        <div class="stats">
+                                            <i class="material-icons text-danger">warning</i>
+                                            <a href="javascript:;">Set priority</a>
+                                        </div>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <button class="btn btn-success " type="submit">
+                            Adauga
+                            task
+                        </button>
+                    }
+                </div>
+                <div class="card-footer">
+                    <div class="stats">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card card-chart">
+                <div class="card-header card-header-warning">
+                    <div class="ct-chart" id="websiteViewsChart">Expenses</div>
+                </div>
+                <div class="card-body">
+                    <h4 class="card-title"></h4>
+                    <table class="table table-hover">
+                        <thead class="text-warning">
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Price</th>
+                        <th></th>
+                        <th></th>
+                        </thead>
+                        <tbody>
+                            @if (ViewBag.UsersCount != 0)
+                            {
+                                var counter = 0;
+                                foreach (var expense in ViewBag.Group.Expenses)
+                                {
+                                    counter += 1;
+
+                                    if (expense.Paid == false)
+                                    {
+                                        <tr>
+                                            <td>@counter</td>
+                                            <td>@expense.Name</td>
+                                            <td>@expense.Price</td>
+                                            <td class="td-actions text-right">
+                                                @if (expense.UserId == ViewBag.UserId || ViewBag.isAdmin)
+                                                {
+                                                    <a href="/Expensess/Edit/@expense.ExpenseId" type="button" title="Edit" class="btn btn-primary btn-link btn-sm">
+                                                        <i class="material-icons" style="color:darkorange">edit</i>
+                                                    </a>
+                                                    <a class="btn btn-primary btn-link btn-sm" type="button title="Show" href="/Expensess/Show/@expense.ExpenseId">
+                                                        <i class="fa fa-eye" style="color:darkorange"></i>
+                                                    </a>
+                                                }
+                                            </td>
+                                            <td class="td-actions text-left">
+                                                @if (ViewBag.isGroupOwner || expense.UserId == ViewBag.UserId || ViewBag.isAdmin)
+                                                {
+                                                    <a>
+                                                        <form method="post" action="/Expensess/Delete/@expense.ExpenseId">
+                                                            @Html.HttpMethodOverride(HttpVerbs.Delete)
+
+                                                            <button class="btn btn-danger btn-link btn-sm" type="submit">
+                                                                <i class="material-icons">close</i>
+                                                            </button>
+                                                        </form>
+                                                    </a>
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-footer">
+                    <div class="stats">
+                        <table class="table">
+                            <tbody>
+                                <td>
+                                    <b style="font-size:larger">Total: @ViewBag.totalSum</b>
+                                </td>
+                                <td>
+                                    <small style="font-size:small">Per user: @ViewBag.sumPerUser</small>
+                                </td>
+                                <td>
+                                    <a class="btn btn-primary" type="button" title="Reset" href="/Expensess/ResetExpensesForGroup/@ViewBag.Group.GroupId" style="background-color:darkorange">
+                                        Reset
+                                    </a>
+                                </td>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    @using (Html.BeginForm(actionName: "New", controllerName: "Expensess"))
+                    {
+                        @Html.Hidden("GroupId")
+
+                        @Html.Label("Name", "Nume cheltuiala")
+
+                        @Html.TextBox("Name", null, new { @class = "form-control" })
+
+                        @Html.ValidationMessage("Name", null, new { @class = "text-danger" })
+
+                        <br />
+
+                        @Html.Label("Price", "Pret")
+
+                        @Html.TextBox("Price", null, new { @class = "form-control" })
+
+                        @Html.ValidationMessage("Price", null, new { @class = "text-danger" })
+
+                        <br />
+
+                        <button class="btn btn-success " type="submit"  style="background-color:darkorange">
+                            Adauga
+                            cheltuiala
+                        </button>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card card-chart">
+                <div class="card-header card-header-danger">
+                    <div class="ct-chart" id="completedTasksChart">Completed Tasks</div>
+                </div>
+                <div class="card-body">
+                    <h4 class="card-title"></h4>
+                    @if (ViewBag.UsersCount != 0)
+                    {
+                        foreach (var task in ViewBag.Group.Tasks)
+                        {
+                            var id = task.TaskId;
+                            if (task.Done == true)
+                            {
+                                <p class="card-category">@task.Title</p>
+                            }
+                        }
+                    }
+                </div>
+                <div class="card-footer">
+                    <div class="stats">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6 col-md-12">
+            <div class="card">
+                <div class="card-header card-header-tabs card-header-primary">
+                    <div class="nav-tabs-navigation">
+                        <div class="nav-tabs-wrapper">
+                            <span class="nav-tabs-title">Mark as done:</span>
+                            <ul class="nav nav-tabs" data-tabs="tabs">
+                                <li class="nav-item">
+                                    <a class="nav-link active" href="#profile" data-toggle="tab"  >
+                                        <script>
+                                            function makeActive(param) {
+                                                document.getElementById(param).className += "nav - link active";
+                                            }
+                                        </script>
+                                        <i class="fa fa-exclamation-triangle" aria-hidden="true" style="color:crimson"></i> High
+                                        <div class="ripple-container"></div>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#messages" data-toggle="tab">
+                                        <i class="fa fa-tasks " aria-hidden="true" style="color:coral"></i> Medium
+                                        <div class="ripple-container"></div>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#settings" data-toggle="tab"   >
+                                        <i class="fa fa-tasks " aria-hidden="true" style="color:aquamarine"></i> Low
+                                        <div class="ripple-container"></div>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="profile">
+                            <table class="table">
+                                <tbody>
+                                    @if (ViewBag.UsersCount != 0)
+                                    {
+                                        foreach (var task in ViewBag.Group.Tasks)
+                                        {
+                                            var idd = task.TaskId;
+                                            if (task.Priority == "Urgent" && task.Done == false)
+                                            {
+
+                                                <tr>
+                                                    <td>
+                                                        <div class="form-check">
+                                                            <label class="form-check-label">
+
+                                                                <input class="form-check-input" type="checkbox" id="edTask" value="@task.TaskId" onclick="doneTask(value)">
+                                                                <span class="form-check-sign">
+                                                                    <span class="check"></span>
+                                                                </span>
+                                                                <script>
+                                                                    function doneTask(id) {
+                                                                        var checkbox = document.getElementById('edTask');
+                                                                        if (checkbox.checked == true) {
+                                                                            $.ajax({
+                                                                                url: '/Taskss/MarkAsDone',
+                                                                                data: { id: id }
+                                                                            });
+                                                                        }
+                                                                    }
+                                                                </script>
+                                                            </label>
+                                                        </div>
+                                                    </td>
+                                                    <td>@task.Description</td>
+                                                    <td class="td-actions text-right">
+
+                                                        @if (task.UserId == ViewBag.UserId || ViewBag.isAdmin)
+                                                        {
+                                                            <a href="/Taskss/Edit/@task.TaskId" type="button" title="Edit Task" class="btn btn-primary btn-link btn-sm">
+                                                                <i class="material-icons">edit</i>
+                                                            </a>
+                                                            <a class="btn btn-primary btn-link btn-sm" type="button" href="/Taskss/Show/@task.TaskId">
+                                                                <i class="fa fa-eye"></i>
+                                                            </a>
+                                                        }
+                                                        @if (ViewBag.isGroupOwner || task.UserId == ViewBag.UserId || ViewBag.isAdmin)
+                                                        {
+                                                            <form method="post" action="/Taskss/Delete/@task.TaskId">
+                                                                @Html.HttpMethodOverride(HttpVerbs.Delete)
+
+                                                                <button class="btn btn-danger btn-link btn-sm" type="submit">
+                                                                    <i class="material-icons">close</i>
+                                                                </button>
+                                                            </form>
+                                                        }
+                                                    </td>
+                                                </tr>
+                                            }
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="tab-pane" id="messages">
+                            <table class="table">
+                                <tbody>
+                                    @if (ViewBag.UsersCount != 0)
+                                    {
+                                        foreach (var task in ViewBag.Group.Tasks)
+                                        {
+                                            if (task.Priority == "Medium" && task.Done == false)
+                                            {
+
+                                                <tr>
+                                                    <td>
+                                                        <div class="form-check">
+                                                            <label class="form-check-label">
+                                                                <input class="form-check-input" type="checkbox" id="edTask" value="@task.TaskId" onclick="doneTask(value)">
+                                                                <span class="form-check-sign">
+                                                                    <span class="check"></span>
+                                                                </span>
+                                                                <script>
+                                                                    function doneTask(id) {
+                                                                        var checkbox = document.getElementById('edTask');
+                                                                        if (checkbox.checked == true) {
+                                                                            $.ajax({
+                                                                                url: '/Taskss/MarkAsDone',
+                                                                                data: { id: id }
+                                                                            });
+                                                                        }
+                                                                    }
+                                                                </script>
+                                                            </label>
+                                                        </div>
+                                                    </td>
+                                                    <td>@task.Description</td>
+                                                    <td class="td-actions text-right">
+                                                        @if (task.UserId == ViewBag.UserId || ViewBag.isAdmin)
+                                                        {
+                                                            <a href="/Taskss/Edit/@task.TaskId" type="button" title="Edit Task" class="btn btn-primary btn-link btn-sm">
+                                                                <i class="material-icons">edit</i>
+                                                            </a>
+                                                            <a class="btn btn-primary btn-link btn-sm" type="button" href="/Taskss/Show/@task.TaskId">
+                                                                <i class="fa fa-eye"></i>
+                                                            </a>
+                                                        }
+                                                        @if (ViewBag.isGroupOwner || task.UserId == ViewBag.UserId || ViewBag.isAdmin)
+                                                        {
+                                                            <form method="post" action="/Taskss/Delete/@task.TaskId">
+                                                                @Html.HttpMethodOverride(HttpVerbs.Delete)
+
+                                                                <button class="btn btn-danger btn-link btn-sm" type="submit">
+                                                                    <i class="material-icons">close</i>
+                                                                </button>
+                                                            </form>
+                                                        }
+                                                    </td>
+                                                </tr>
+                                            }
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="tab-pane" id="settings">
+                            <table class="table">
+                                <tbody>
+                                    @if (ViewBag.UsersCount != 0)
+                                    {
+                                        foreach (var task in ViewBag.Group.Tasks)
+                                        {
+                                            
+                                            if (task.Priority == "Low" && task.Done == false)
+                                            {
+
+                                                <tr>
+                                                    <td>
+                                                        <div class="form-check">
+                                                            <label class="form-check-label">
+                                                                <input class="form-check-input" type="checkbox" id="edTask" value="@task.TaskId" onclick="doneTask(value)">
+                                                                <span class="form-check-sign">
+                                                                    <span class="check"></span>
+                                                                </span>
+                                                                <script>
+                                                                    function doneTask(id) {
+                                                                        var checkbox = document.getElementById('edTask');
+                                                                        if (checkbox.checked == true) {
+                                                                            $.ajax({
+                                                                                url: '/Taskss/MarkAsDone',
+                                                                                data: { id: id }
+                                                                            });
+                                                                        }
+                                                                    }
+                                                                </script>
+                                                            </label>
+                                                        </div>
+                                                    </td>
+                                                    <td>@task.Description</td>
+                                                    <td class="td-actions text-right">
+
+                                                        @if (task.UserId == ViewBag.UserId || ViewBag.isAdmin)
+                                                        {
+                                                            <a href="/Taskss/Edit/@task.TaskId" type="button" title="Edit Task" class="btn btn-primary btn-link btn-sm">
+                                                                <i class="material-icons">edit</i>
+                                                            </a>
+                                                            <a class="btn btn-primary btn-link btn-sm" type="button" href="/Taskss/Show/@task.TaskId">
+                                                                <i class="fa fa-eye"></i>
+                                                            </a>
+                                                        }
+                                                        @if (ViewBag.isGroupOwner || task.UserId == ViewBag.UserId || ViewBag.isAdmin)
+                                                        {
+                                                            <form method="post" action="/Taskss/Delete/@task.TaskId">
+                                                                @Html.HttpMethodOverride(HttpVerbs.Delete)
+
+                                                                <button class="btn btn-danger btn-link btn-sm" type="submit">
+                                                                    <i class="material-icons">close</i>
+                                                                </button>
+                                                            </form>
+                                                        }
+
+                                                    </td>
+                                                </tr>
+                                            }
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 col-md-12">
+            <div class="card">
+                <div class="card-header card-header-info">
+                    <h4 class="card-title">Unfinished Tasks</h4>
+                    <p class="card-category"></p>
+                </div>
+                <div class="card-body table-responsive">
+                    <table class="table table-hover">
+                        <thead class="text-info">
+                        <th>ID</th>
+                        <th>Title</th>
+                        <th>Assigned by</th>
+                        <th>Deadline</th>
+                        <th>Assigned to</th>
+                        </thead>
+                        <tbody>
+                            @if (ViewBag.UsersCount != 0)
+                            {
+                                var counter = 0;
+                                foreach (var task in ViewBag.Group.Tasks)
+                                {
+                                    counter += 1;
+
+                                    if (task.Done == false)
+                                    {
+                                        <tr>
+                                            <td>@counter</td>
+                                            <td>@task.Title</td>
+                                            <td>@task.User.UserName</td>
+                                            <td>@task.Deadline</td>
+                                            <td>@task.User2.UserName</td>
+                                        </tr>
+                                    }
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        @Html.Action("Index", "BasicScheduler", new { id = ViewBag.Group.GroupId })
+    </div>
+
+</div>
+}
+else
+{
+    if (ViewBag.Accepted == null)
+    {
+        <a class="btn btn-info" href="/Groups/GroupNotification/@ViewBag.Group.GroupId">Inscrie-te in grup</a>
+    }
+    else
+    {
+        <p>Wait until admin approves your registration</p>
+    }
+
+}
+
+
+<footer class="footer">
+    <div class="container-fluid">
+        <nav class="float-left">
+            <ul>
+                <li>
+                    <a href="/Home/Index">
+                        Space Organizing
+                        &copy;
+                        <script>document.write(new Date().getFullYear())</script>
+                    </a>
+                </li>
+
+
+            </ul>
+        </nav>
+
+    </div>
+</footer>
+<!--
+<div class="fixed-plugin">
+    <div class="dropdown show-dropdown">
+        <a href="#" data-toggle="dropdown">
+            <i class="fa fa-cog fa-2x"> </i>
+        </a>
+        <ul class="dropdown-menu">
+            <li class="header-title"> Sidebar Filters</li>
+            <li class="adjustments-line">
+                <a href="javascript:void(0)" class="switch-trigger active-color">
+                    <div class="badge-colors ml-auto mr-auto">
+                        <span class="badge filter badge-purple" data-color="purple"></span>
+                        <span class="badge filter badge-azure" data-color="azure"></span>
+                        <span class="badge filter badge-green" data-color="green"></span>
+                        <span class="badge filter badge-warning" data-color="orange"></span>
+                        <span class="badge filter badge-danger" data-color="danger"></span>
+                        <span class="badge filter badge-rose active" data-color="rose"></span>
+                    </div>
+                    <div class="clearfix"></div>
+                </a>
+            </li>
+            <li class="header-title">Images</li>
+            <li class="active">
+                <a class="img-holder switch-trigger" href="javascript:void(0)">
+                    <img src="../assets/img/sidebar-1.jpg" alt="">
+                </a>
+            </li>
+            <li>
+                <a class="img-holder switch-trigger" href="javascript:void(0)">
+                    <img src="../assets/img/sidebar-2.jpg" alt="">
+                </a>
+            </li>
+            <li>
+                <a class="img-holder switch-trigger" href="javascript:void(0)">
+                    <img src="../assets/img/sidebar-3.jpg" alt="">
+                </a>
+            </li>
+            <li>
+                <a class="img-holder switch-trigger" href="javascript:void(0)">
+                    <img src="../assets/img/sidebar-4.jpg" alt="">
+                </a>
+            </li>
+
+            <li class="button-container text-center">
+                <button id="twitter" class="btn btn-round btn-twitter"><i class="fa fa-twitter"></i> &middot; 45</button>
+                <button id="facebook" class="btn btn-round btn-facebook"><i class="fa fa-facebook-f"></i> &middot; 50</button>
+                <br>
+                <br>
+            </li>
+        </ul>
+    </div>
+</div>
+-->

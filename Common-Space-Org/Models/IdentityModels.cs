@@ -34,10 +34,10 @@ namespace Common_Space_Org.Models
         [StringLength(100, ErrorMessage = "Descrierea profilului nu poate avea mai mult de 100 de caractere")]
         public string ProfileDescription { get; set; }
 
-        //public virtual ICollection<Registration> Registrations { get; set; }
-       // public IEnumerable<SelectListItem> AllRoles { get; set; }
+        public virtual ICollection<Registration> Registrations { get; set; }
+        public IEnumerable<SelectListItem> AllRoles { get; set; }
 
-       // public ICollection<Group> UserGroups { get; set; }
+        public ICollection<Group> UserGroups { get; set; }
 
         //un user poate avea mai multe taskuri asignate
        // public virtual ICollection<Tasks> AsignedTasks { get; set; }
@@ -54,6 +54,20 @@ namespace Common_Space_Org.Models
             : base("DefaultConnection", throwIfV1Schema: false)
         {
         }
+
+        // modele aplicatie 
+        // public DbSet<Tasks> Tasks { get; set; }
+
+        public DbSet<Group> Groups { get; set; }
+
+        // public DbSet<Profile> Profiles { get; set; }
+
+        public DbSet<Registration> Registrations { get; set; }
+
+
+        // public DbSet<Expense> Expenses { get; set; }
+
+        // public DbSet<Notification> Notifications { get; set; }
 
         public static ApplicationDbContext Create()
         {

@@ -54,9 +54,9 @@ namespace Common_Space_Org
             //   consumerKey: "",
             //   consumerSecret: "");
 
-            //app.UseFacebookAuthentication(
-            //   appId: "",
-            //   appSecret: "");
+            app.UseFacebookAuthentication(
+            appId: "517858762554839",
+            appSecret: "1c02d861d5cafce9cf7e8c484ddc66ff");
 
             //app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
             //{
