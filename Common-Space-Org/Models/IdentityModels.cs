@@ -60,7 +60,7 @@ namespace Common_Space_Org.Models
 
         public DbSet<Group> Groups { get; set; }
 
-        // public DbSet<Profile> Profiles { get; set; }
+        public DbSet<Profile> Profiles { get; set; }
 
         public DbSet<Registration> Registrations { get; set; }
 

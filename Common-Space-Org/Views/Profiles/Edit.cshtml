@@ -1,0 +1,52 @@
+﻿
+@{
+    ViewBag.Title = "Edit";
+}
+@{
+    Layout = "~/Views/Shared/Dashboard.cshtml";
+}
+<h2 style="color:darkblue">Editare profil</h2>
+<br />
+
+<form class="panel-body" method="post" action="/Profiles/Edit">
+    @Html.HttpMethodOverride(HttpVerbs.Put)
+
+    @Html.Hidden("Id")
+
+    @Html.Label("UserName", "Username")
+    <br />
+    @Html.Editor("Username")
+    <br />
+    <br />
+    @Html.Label("LastName", "Last name")
+    <br />
+    @Html.Editor("LastName")
+    <br />
+    <br />
+
+    @Html.Label("FirstName", "Last name")
+    <br />
+    @Html.Editor("FirstName")
+    <br />
+    <br />
+
+    @Html.Label("BirthDate", "Data nasterii")
+    <br />
+    @Html.Editor("BirthDate")
+    <br />
+
+    <br />
+
+    @Html.Label("PhoneNumber", "Phone number")
+    <br />
+    @Html.Editor("PhoneNumber")
+    <br />
+    <br />
+    @Html.Label("ProfileDescription", "Descriere profil")
+    <br />
+    @Html.Editor("ProfileDescription")
+    <br />
+    <br />
+    <button class="btn btn-success" type="submit">Modifica profil</button>
+</form>
+
