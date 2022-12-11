@@ -40,10 +40,10 @@ namespace Common_Space_Org.Models
         public ICollection<Group> UserGroups { get; set; }
 
         //un user poate avea mai multe taskuri asignate
-       // public virtual ICollection<Tasks> AsignedTasks { get; set; }
+        public virtual ICollection<Tasks> AsignedTasks { get; set; }
 
         //un user poate crea mai multe taskuri
-       // public virtual ICollection<Tasks> CreatedTasks { get; set; }
+        public virtual ICollection<Tasks> CreatedTasks { get; set; }
 
        public virtual ICollection<Notification> Notifications { get; set; }
     }
@@ -56,7 +56,7 @@ namespace Common_Space_Org.Models
         }
 
         // modele aplicatie 
-        // public DbSet<Tasks> Tasks { get; set; }
+        public DbSet<Tasks> Tasks { get; set; }
 
         public DbSet<Group> Groups { get; set; }
 
