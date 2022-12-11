@@ -15,7 +15,7 @@
 
 @if (ViewBag.CountUsers != 0)
 {
-    foreach (SpaceOrganizing.Models.ApplicationUser user in ViewBag.UsersList)
+    foreach (Common_Space_Org.Models.ApplicationUser user in ViewBag.UsersList)
     {
         <div class="row">
             <div class="col-sm-2"></div>
@@ -40,7 +40,7 @@
 }
 
 
-@foreach (SpaceOrganizing.Models.Group group in ViewBag.Groups)
+@foreach (Common_Space_Org.Models.Group group in ViewBag.Groups)
 {
     //if (group.GroupId != 1)
     //{

@@ -123,34 +123,34 @@ namespace Common_Space_Org.Controllers
             }
             ViewBag.Group = group;
             bool acc = true;
-            //List<Tasks> taskuriDone = (from task in db.Tasks
-            //                 where task.Done == true && task.GroupId == id
-            //                 select task).ToList();
-            //ViewBag.countDone = taskuriDone.Count;
-            //List<Tasks> lowP = new List<Tasks>();
-            //List<Tasks> highP = new List<Tasks>();
-            //List<Tasks> medP = new List<Tasks>();
-            //foreach (var task in taskuriDone)
-            //{
-            //    if (task.Priority == "Urgent" && task.Done == false)
-            //    {
-            //        highP.Add(task);
-            //    }
-            //    else if (task.Priority =="Medium" && task.Done==false)
-            //    {
-            //        medP.Add(task);
-            //    }
-            //    else if (task.Priority == "Low" && task.Done == false)
-            //   {
-            //        lowP.Add(task);
-            //    }
-            //}
-            //ViewBag.lowP = lowP;
-            //ViewBag.highP = highP;
-            //ViewBag.medP = medP;
-            //ViewBag.UsersList = GetAllUsers(id);
-            //ViewBag.countTasks = group.Tasks.ToList().Count(); 
-            //int totalSum = 0;
+            List<Tasks> taskuriDone = (from task in db.Tasks
+                                       where task.Done == true && task.GroupId == id
+                                       select task).ToList();
+            ViewBag.countDone = taskuriDone.Count;
+            List<Tasks> lowP = new List<Tasks>();
+            List<Tasks> highP = new List<Tasks>();
+            List<Tasks> medP = new List<Tasks>();
+            foreach (var task in taskuriDone)
+            {
+                if (task.Priority == "Urgent" && task.Done == false)
+                {
+                    highP.Add(task);
+                }
+                else if (task.Priority == "Medium" && task.Done == false)
+                {
+                    medP.Add(task);
+                }
+                else if (task.Priority == "Low" && task.Done == false)
+                {
+                    lowP.Add(task);
+                }
+            }
+            ViewBag.lowP = lowP;
+            ViewBag.highP = highP;
+            ViewBag.medP = medP;
+            ViewBag.UsersList = GetAllUsers(id);
+            ViewBag.countTasks = group.Tasks.ToList().Count();
+            int totalSum = 0;
 
             //totalSum = 0;
             //foreach (Expense expense in group.Expenses)
@@ -196,7 +196,7 @@ namespace Common_Space_Org.Controllers
                     string toMail = user.Email;
                     string subject = "Creare grup nou";
                     string body = "Ati creat cu succes grupul: " + gr.GroupName + ". O zi frumoasa!";
-                    WebMail.Send(toMail, subject, body, null, null, null, true, null, null, null, null, null, null);
+                   // WebMail.Send(toMail, subject, body, null, null, null, true, null, null, null, null, null, null);
 
                     return Redirect("/Groups/Show/" + @gr.GroupId);
                 }
@@ -347,7 +347,7 @@ namespace Common_Space_Org.Controllers
             string toMail = user.Email;
             string subject = "Alaturare grup";
             string body = "V-ati alaturat grupului: " + group.GroupName + ". O zi frumoasa!";
-            WebMail.Send(toMail, subject, body, null, null, null, true, null, null, null, null, null, null);
+            //WebMail.Send(toMail, subject, body, null, null, null, true, null, null, null, null, null, null);
 
 
             return Redirect("/Groups/Show/" + groupId);
@@ -382,7 +382,7 @@ namespace Common_Space_Org.Controllers
             string toMail = newGroupMember.Email;
             string subject = "Acceptare in grup";
             string body = "Ati fost acceptat in grupul: " + group.GroupName + ". O zi frumoasa!";
-            WebMail.Send(toMail, subject, body, null, null, null, true, null, null, null, null, null, null);
+           // WebMail.Send(toMail, subject, body, null, null, null, true, null, null, null, null, null, null);
 
 
             return Redirect("/Profiles/Index");

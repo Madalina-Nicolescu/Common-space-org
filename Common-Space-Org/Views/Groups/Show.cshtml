@@ -214,7 +214,7 @@
                 <div class="card-header card-header-warning">
                     <div class="ct-chart" id="websiteViewsChart">Expenses</div>
                 </div>
-                <div class="card-body">
+                @*<div class="card-body">
                     <h4 class="card-title"></h4>
                     <table class="table table-hover">
                         <thead class="text-warning">
@@ -223,9 +223,9 @@
                         <th>Price</th>
                         <th></th>
                         <th></th>
-                        </thead>
-                        <tbody>
-                            @if (ViewBag.UsersCount != 0)
+                        </thead>*@
+                        <!--<tbody>
+                            @*if (ViewBag.UsersCount != 0)
                             {
                                 var counter = 0;
                                 foreach (var expense in ViewBag.Group.Expenses)
@@ -234,8 +234,8 @@
 
                                     if (expense.Paid == false)
                                     {
-                                        <tr>
-                                            <td>@counter</td>
+                                        <tr>-->
+                                            @*<td>@counter</td>
                                             <td>@expense.Name</td>
                                             <td>@expense.Price</td>
                                             <td class="td-actions text-right">
@@ -248,8 +248,8 @@
                                                         <i class="fa fa-eye" style="color:darkorange"></i>
                                                     </a>
                                                 }
-                                            </td>
-                                            <td class="td-actions text-left">
+                                            </td>*@
+                                            @*<td class="td-actions text-left">
                                                 @if (ViewBag.isGroupOwner || expense.UserId == ViewBag.UserId || ViewBag.isAdmin)
                                                 {
                                                     <a>
@@ -262,14 +262,14 @@
                                                         </form>
                                                     </a>
                                                 }
-                                            </td>
-                                        </tr>
+                                            </td>*@
+                                        <!--</tr>
                                     }
                                 }
                             }
-                        </tbody>
-                    </table>
-                </div>
+                        </tbody>-->
+                    @*</table>
+                </div>*@
                 <div class="card-footer">
                     <div class="stats">
                         <table class="table">

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
-namespace SpaceOrganizing.Controllers
+namespace Common_Space_Org.Controllers
 {
     public class ErrorPageController : Controller
     {

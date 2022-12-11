@@ -167,7 +167,7 @@ namespace Common_Space_Org.Controllers
                     string toMail = user.Email;
                     string subject = "Inregistrare platforma";
                     string body = "V-ati inregistrat cu succes la platforma Apes Together Strong. O zi frumoasa!";
-                    WebMail.Send(toMail, subject, body, null, null, null, true, null, null, null, null, null, null);
+                   // WebMail.Send(toMail, subject, body, null, null, null, true, null, null, null, null, null, null);
 
                     return RedirectToAction("Index", "Home");
                 }

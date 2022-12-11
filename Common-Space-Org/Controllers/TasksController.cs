@@ -101,7 +101,7 @@ namespace Common_Space_Org.Controllers
             string toMail = Task.User2.Email;
             string subject = "Alocare task nou";
             string body = "Ati fost asignat unui task: " + Task.Title + ", in cadrul grupului: " + Group.GroupName + ". O zi frumoasa!";
-            WebMail.Send(toMail, subject, body, null, null, null, true, null, null, null, null, null, null);
+            //WebMail.Send(toMail, subject, body, null, null, null, true, null, null, null, null, null, null);
         }
 
         //SHOW
