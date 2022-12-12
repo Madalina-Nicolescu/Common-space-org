@@ -24,11 +24,11 @@ namespace Common_Space_Org.Models
         [Required(ErrorMessage = "Deadline-ul este obligatoriu.")]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
-        public DateTime Deadline { get; set; }
+        public DateTime? Deadline { get; set; }
 
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
-        public DateTime StartDate { get; set; }
+        public DateTime? StartDate { get; set; }
 
         public int GroupId { get; set; }
 
