@@ -164,11 +164,6 @@ namespace Common_Space_Org.Controllers
                     // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
 
-                    string toMail = user.Email;
-                    string subject = "Inregistrare platforma";
-                    string body = "V-ati inregistrat cu succes la platforma Apes Together Strong. O zi frumoasa!";
-                   // WebMail.Send(toMail, subject, body, null, null, null, true, null, null, null, null, null, null);
-
                     return RedirectToAction("Index", "Home");
                 }
                 AddErrors(result);

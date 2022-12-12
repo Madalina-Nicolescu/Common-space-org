@@ -91,19 +91,6 @@ namespace Common_Space_Org.Controllers
             return UsersList;
         }
 
-        // trimitere mail
-        [NonAction]
-        public void taskAsigantionEmailAsync(int taskId, int groupId)
-        {
-            Tasks Task = db.Tasks.Find(taskId);
-            Group Group = db.Groups.Find(groupId);
-
-            string toMail = Task.User2.Email;
-            string subject = "Alocare task nou";
-            string body = "Ati fost asignat unui task: " + Task.Title + ", in cadrul grupului: " + Group.GroupName + ". O zi frumoasa!";
-            //WebMail.Send(toMail, subject, body, null, null, null, true, null, null, null, null, null, null);
-        }
-
         //SHOW
         //GET: afisarea unui singur task
         [Authorize(Roles = "User,Administrator")]
@@ -199,7 +186,6 @@ namespace Common_Space_Org.Controllers
                         if (user2 != null)
                         {
                             user2.AsignedTasks.Add(newTask);
-                            taskAsigantionEmailAsync(newTask.TaskId, newTask.GroupId);
                         }
                         db.Groups.Find(newTask.GroupId).Tasks.Add(newTask);
                         db.SaveChanges();
@@ -285,7 +271,6 @@ namespace Common_Space_Org.Controllers
                             {
                                 user2.AsignedTasks.Add(editedTask);
                                 user2Initial.AsignedTasks.Remove(Task);
-                                taskAsigantionEmailAsync(editedTask.TaskId, editedTask.GroupId);
                             }
                             else if (user2 == null && user2Initial != null)
                             {
@@ -294,7 +279,6 @@ namespace Common_Space_Org.Controllers
                             else if (user2Initial == null && user2 != null)
                             {
                                 user2.AsignedTasks.Add(editedTask);
-                                taskAsigantionEmailAsync(editedTask.TaskId, editedTask.GroupId);
                             }
                             db.Tasks.Remove(Task);
                             db.Tasks.Add(editedTask);

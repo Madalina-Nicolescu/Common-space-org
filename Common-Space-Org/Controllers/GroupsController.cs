@@ -122,7 +122,6 @@ namespace Common_Space_Org.Controllers
                 }
             }
             ViewBag.Group = group;
-            bool acc = true;
             List<Tasks> taskuriDone = (from task in db.Tasks
                                        where task.Done == true && task.GroupId == id
                                        select task).ToList();
@@ -150,18 +149,7 @@ namespace Common_Space_Org.Controllers
             ViewBag.medP = medP;
             ViewBag.UsersList = GetAllUsers(id);
             ViewBag.countTasks = group.Tasks.ToList().Count();
-            int totalSum = 0;
 
-            //totalSum = 0;
-            //foreach (Expense expense in group.Expenses)
-            //{
-            //    if (!expense.Paid)
-            //    {
-            //        totalSum += expense.Price;
-            //    }
-            //}
-            //ViewBag.totalSum = totalSum;
-            //ViewBag.sumPerUser = totalSum / ViewBag.UsersCount;
             return View(group);
         }
 
@@ -192,11 +180,6 @@ namespace Common_Space_Org.Controllers
                     db.SaveChanges();
                     gr.Registrations.Add(reg);
                     db.SaveChanges();
-
-                    string toMail = user.Email;
-                    string subject = "Creare grup nou";
-                    string body = "Ati creat cu succes grupul: " + gr.GroupName + ". O zi frumoasa!";
-                   // WebMail.Send(toMail, subject, body, null, null, null, true, null, null, null, null, null, null);
 
                     return Redirect("/Groups/Show/" + @gr.GroupId);
                 }
@@ -344,12 +327,6 @@ namespace Common_Space_Org.Controllers
             ApplicationUser user = db.Users.Find(notification.receivingUser);
             Group group = db.Groups.Find(notification.GroupId);
 
-            string toMail = user.Email;
-            string subject = "Alaturare grup";
-            string body = "V-ati alaturat grupului: " + group.GroupName + ". O zi frumoasa!";
-            //WebMail.Send(toMail, subject, body, null, null, null, true, null, null, null, null, null, null);
-
-
             return Redirect("/Groups/Show/" + groupId);
         }
 
@@ -378,12 +355,6 @@ namespace Common_Space_Org.Controllers
             db.Notifications.Add(acceptanceNotification);
 
             db.SaveChanges();
-
-            string toMail = newGroupMember.Email;
-            string subject = "Acceptare in grup";
-            string body = "Ati fost acceptat in grupul: " + group.GroupName + ". O zi frumoasa!";
-           // WebMail.Send(toMail, subject, body, null, null, null, true, null, null, null, null, null, null);
-
 
             return Redirect("/Profiles/Index");
         }

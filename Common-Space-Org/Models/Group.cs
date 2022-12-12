@@ -23,6 +23,5 @@ namespace Common_Space_Org.Models
         public virtual ApplicationUser User { get; set; }
         public virtual ICollection<Registration> Registrations { get; set; }
         public virtual ICollection<Tasks> Tasks { get; set; }
-        // public virtual ICollection<Expense> Expenses { get; set; }
     }
 }

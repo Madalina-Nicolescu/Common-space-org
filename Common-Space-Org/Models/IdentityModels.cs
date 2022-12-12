@@ -64,9 +64,6 @@ namespace Common_Space_Org.Models
 
         public DbSet<Registration> Registrations { get; set; }
 
-
-        // public DbSet<Expense> Expenses { get; set; }
-
         public DbSet<Notification> Notifications { get; set; }
 
         public static ApplicationDbContext Create()

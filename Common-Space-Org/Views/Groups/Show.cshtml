@@ -211,116 +211,6 @@
         </div>
         <div class="col-md-4">
             <div class="card card-chart">
-                <div class="card-header card-header-warning">
-                    <div class="ct-chart" id="websiteViewsChart">Expenses</div>
-                </div>
-                @*<div class="card-body">
-                    <h4 class="card-title"></h4>
-                    <table class="table table-hover">
-                        <thead class="text-warning">
-                        <th>ID</th>
-                        <th>Name</th>
-                        <th>Price</th>
-                        <th></th>
-                        <th></th>
-                        </thead>*@
-                        <!--<tbody>
-                            @*if (ViewBag.UsersCount != 0)
-                            {
-                                var counter = 0;
-                                foreach (var expense in ViewBag.Group.Expenses)
-                                {
-                                    counter += 1;
-
-                                    if (expense.Paid == false)
-                                    {
-                                        <tr>-->
-                                            @*<td>@counter</td>
-                                            <td>@expense.Name</td>
-                                            <td>@expense.Price</td>
-                                            <td class="td-actions text-right">
-                                                @if (expense.UserId == ViewBag.UserId || ViewBag.isAdmin)
-                                                {
-                                                    <a href="/Expensess/Edit/@expense.ExpenseId" type="button" title="Edit" class="btn btn-primary btn-link btn-sm">
-                                                        <i class="material-icons" style="color:darkorange">edit</i>
-                                                    </a>
-                                                    <a class="btn btn-primary btn-link btn-sm" type="button title="Show" href="/Expensess/Show/@expense.ExpenseId">
-                                                        <i class="fa fa-eye" style="color:darkorange"></i>
-                                                    </a>
-                                                }
-                                            </td>*@
-                                            @*<td class="td-actions text-left">
-                                                @if (ViewBag.isGroupOwner || expense.UserId == ViewBag.UserId || ViewBag.isAdmin)
-                                                {
-                                                    <a>
-                                                        <form method="post" action="/Expensess/Delete/@expense.ExpenseId">
-                                                            @Html.HttpMethodOverride(HttpVerbs.Delete)
-
-                                                            <button class="btn btn-danger btn-link btn-sm" type="submit">
-                                                                <i class="material-icons">close</i>
-                                                            </button>
-                                                        </form>
-                                                    </a>
-                                                }
-                                            </td>*@
-                                        <!--</tr>
-                                    }
-                                }
-                            }
-                        </tbody>-->
-                    @*</table>
-                </div>*@
-                <div class="card-footer">
-                    <div class="stats">
-                        <table class="table">
-                            <tbody>
-                                <td>
-                                    <b style="font-size:larger">Total: @ViewBag.totalSum</b>
-                                </td>
-                                <td>
-                                    <small style="font-size:small">Per user: @ViewBag.sumPerUser</small>
-                                </td>
-                                <td>
-                                    <a class="btn btn-primary" type="button" title="Reset" href="/Expensess/ResetExpensesForGroup/@ViewBag.Group.GroupId" style="background-color:darkorange">
-                                        Reset
-                                    </a>
-                                </td>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <div class="card-body">
-                    @using (Html.BeginForm(actionName: "New", controllerName: "Expensess"))
-                    {
-                        @Html.Hidden("GroupId")
-
-                        @Html.Label("Name", "Nume cheltuiala")
-
-                        @Html.TextBox("Name", null, new { @class = "form-control" })
-
-                        @Html.ValidationMessage("Name", null, new { @class = "text-danger" })
-
-                        <br />
-
-                        @Html.Label("Price", "Pret")
-
-                        @Html.TextBox("Price", null, new { @class = "form-control" })
-
-                        @Html.ValidationMessage("Price", null, new { @class = "text-danger" })
-
-                        <br />
-
-                        <button class="btn btn-success " type="submit"  style="background-color:darkorange">
-                            Adauga
-                            cheltuiala
-                        </button>
-                    }
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card card-chart">
                 <div class="card-header card-header-danger">
                     <div class="ct-chart" id="completedTasksChart">Completed Tasks</div>
                 </div>
@@ -333,7 +223,9 @@
                             var id = task.TaskId;
                             if (task.Done == true)
                             {
-                                <p class="card-category">@task.Title</p>
+                                <a href="/Taskss/Show/@task.TaskId">
+                                    <p class="card-category">@task.Title</p>
+                                </a>
                             }
                         }
                     }
@@ -416,7 +308,7 @@
                                                             </label>
                                                         </div>
                                                     </td>
-                                                    <td>@task.Description</td>
+                                                    <td>@task.Title</td>
                                                     <td class="td-actions text-right">
 
                                                         @if (task.UserId == ViewBag.UserId || ViewBag.isAdmin)
@@ -478,7 +370,7 @@
                                                             </label>
                                                         </div>
                                                     </td>
-                                                    <td>@task.Description</td>
+                                                    <td>@task.Title</td>
                                                     <td class="td-actions text-right">
                                                         @if (task.UserId == ViewBag.UserId || ViewBag.isAdmin)
                                                         {
@@ -540,7 +432,7 @@
                                                             </label>
                                                         </div>
                                                     </td>
-                                                    <td>@task.Description</td>
+                                                    <td>@task.Title</td>
                                                     <td class="td-actions text-right">
 
                                                         @if (task.UserId == ViewBag.UserId || ViewBag.isAdmin)
@@ -605,7 +497,11 @@
                                             <td>@task.Title</td>
                                             <td>@task.User.UserName</td>
                                             <td>@task.Deadline</td>
-                                            <td>@task.User2.UserName</td>
+
+                                            @if (task.User2 != null) 
+                                            {
+                                                <td>@task.User2.UserName</td>
+                                            }
                                         </tr>
                                     }
                                 }
@@ -654,56 +550,3 @@ else
 
     </div>
 </footer>
-<!--
-<div class="fixed-plugin">
-    <div class="dropdown show-dropdown">
-        <a href="#" data-toggle="dropdown">
-            <i class="fa fa-cog fa-2x"> </i>
-        </a>
-        <ul class="dropdown-menu">
-            <li class="header-title"> Sidebar Filters</li>
-            <li class="adjustments-line">
-                <a href="javascript:void(0)" class="switch-trigger active-color">
-                    <div class="badge-colors ml-auto mr-auto">
-                        <span class="badge filter badge-purple" data-color="purple"></span>
-                        <span class="badge filter badge-azure" data-color="azure"></span>
-                        <span class="badge filter badge-green" data-color="green"></span>
-                        <span class="badge filter badge-warning" data-color="orange"></span>
-                        <span class="badge filter badge-danger" data-color="danger"></span>
-                        <span class="badge filter badge-rose active" data-color="rose"></span>
-                    </div>
-                    <div class="clearfix"></div>
-                </a>
-            </li>
-            <li class="header-title">Images</li>
-            <li class="active">
-                <a class="img-holder switch-trigger" href="javascript:void(0)">
-                    <img src="../assets/img/sidebar-1.jpg" alt="">
-                </a>
-            </li>
-            <li>
-                <a class="img-holder switch-trigger" href="javascript:void(0)">
-                    <img src="../assets/img/sidebar-2.jpg" alt="">
-                </a>
-            </li>
-            <li>
-                <a class="img-holder switch-trigger" href="javascript:void(0)">
-                    <img src="../assets/img/sidebar-3.jpg" alt="">
-                </a>
-            </li>
-            <li>
-                <a class="img-holder switch-trigger" href="javascript:void(0)">
-                    <img src="../assets/img/sidebar-4.jpg" alt="">
-                </a>
-            </li>
-
-            <li class="button-container text-center">
-                <button id="twitter" class="btn btn-round btn-twitter"><i class="fa fa-twitter"></i> &middot; 45</button>
-                <button id="facebook" class="btn btn-round btn-facebook"><i class="fa fa-facebook-f"></i> &middot; 50</button>
-                <br>
-                <br>
-            </li>
-        </ul>
-    </div>
-</div>
--->
